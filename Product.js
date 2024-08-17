@@ -1,7 +1,6 @@
 class Product {
-    constructor(productName, unitPrice) {
-        this.productName = productName;
-        this.unitPrice = unitPrice;
-        this.qty = 1;
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
     }
 }
