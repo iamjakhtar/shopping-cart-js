@@ -34,13 +34,16 @@ productsList.addEventListener("click", (event) => {
 
         const productCard = event.target.closest('.product-card');
         const productName = productCard.getAttribute("data-name");
-        const price = productCard.getAttribute("data-price");
-        
-        try {
-            cart.addToCart(new Product(productName, price));
-            renderCartItems();
-        } catch (error) {
-            alert(error.message);
+        const product = stock.find(p => p.name === productName);
+        // const price = productCard.getAttribute("data-price");
+        if (product) {
+
+            try {
+                cart.addToCart(new Product(product.name, product.price));
+                renderCartItems();
+            } catch (error) {
+                alert(error.message);
+            }
         }
     }
 });
