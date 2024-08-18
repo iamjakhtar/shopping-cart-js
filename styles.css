@@ -49,12 +49,15 @@ footer {
     position: absolute;
     right: 10px;
     top: 50px;
-    height: 200px;
+    min-height: 200px;
+    height: auto;
     width: 280px;
-    border: 1px solid var(--color-secondary);
+    padding: 10px;
+    box-shadow: 0px 0px 5px var(--color-secondary);
     z-index: 100;
     background: var(--color-primary);
     color: var(--color-text);
+    overflow-y: auto;
 }
 
 #product-list {
@@ -76,6 +79,7 @@ footer {
     width: 100%;
     height: 240px;
 }
+
 .product-card-info {
     display: flex;
     justify-content: space-between;
@@ -106,3 +110,41 @@ footer {
 .show-cart {
     display: block;
 }
+
+
+.cart-header, .cart-item {
+    display: flex;
+    justify-content: space-around;
+}
+.cart-header {
+    border-bottom: 2px solid var(--color-text);
+    font-weight: 600;
+}
+
+.cart-item > span:nth-child(2) {
+    padding-left: 35px;
+    text-align: center;
+}
+
+.cart-footer {
+    border-top: 2px solid var(--color-text);
+    margin-top: 10px;
+    position: sticky;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cart-footer > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+

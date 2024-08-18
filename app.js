@@ -4,7 +4,12 @@ const cartDropdown = document.getElementById("cart");
 const cartIcon = document.querySelector(".cart-icon");
 const addToCartButton = document.getElementById("add-to-cart");
 
-const cart  = new Cart();
+const discounts = [
+    new Discount("A", 3, 1.30),
+    new Discount("B", 2, 0.45)
+];
+
+const cart  = new Cart(discounts);
 function toggleCartOpen() {
     if (cartDropdown.classList.contains('hide-cart')) {
         cartDropdown.classList.remove('hide-cart');
@@ -74,11 +79,32 @@ function renderCartItems() {
     cartItems.forEach(cartItem => {
         const cartItemNode = `
             <div class="cart-item">
-                <span>${cartItem.name} x</span>
+                <span>${cartItem.name}</span>
                 <span>${cartItem.qty}</span>
                 <span>£${(cartItem.price * cartItem.qty).toFixed(2)}</span>
             </div>
         `;
         cartDropdown.insertAdjacentHTML("beforeend", cartItemNode);
-    })
+    });
+
+    const cartFooter = `
+        <div class="cart-footer">
+            <div>
+                <span>Net Total:</span>
+                <span>£${cart.getNetCartTotal().toFixed(2)}</span>
+            </div>
+            <div>
+                <span>Discount:</span>
+                <span>£${cart.getTotalDiscount()}</span>
+            </div>
+            <div>
+                <span>Total:</span>
+                <span>£${cart.getCartTotal()}</span>
+            </div>
+        </div>
+    `;
+
+    cartDropdown.insertAdjacentHTML("beforeend", cartFooter);
 }
+
+
