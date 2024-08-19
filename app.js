@@ -2,7 +2,6 @@
 const productsList = document.getElementById("product-list");
 const cartDropdown = document.getElementById("cart");
 const cartIcon = document.querySelector(".cart-icon");
-const addToCartButton = document.getElementById("add-to-cart");
 
 const discounts = [
     new Discount("A", 3, 1.30),
@@ -11,13 +10,9 @@ const discounts = [
 
 const cart  = new Cart(discounts);
 function toggleCartOpen() {
-    if (cartDropdown.classList.contains('hide-cart')) {
-        cartDropdown.classList.remove('hide-cart');
-        if (!cart.getCartItems().length) {
-            cartDropdown.innerHTML = "<p>Cart is empty</p>";
-        }
-    } else {
-        cartDropdown.classList.add('hide-cart');
+    cartDropdown.classList.toggle("hide-cart");
+    if (!cart.getCartItems().length && !cartDropdown.classList.contains('hide-cart')) {
+        cartDropdown.innerHTML = "<p>Cart is empty</p>";
     }
 }
 
@@ -30,12 +25,11 @@ stock.forEach(product => {
 })
 
 productsList.addEventListener("click", (event) => {
-    if (event.target.closest("button#add-to-cart")) {
+    if (event.target.closest("[data-action='add-to-cart']")) {
 
         const productCard = event.target.closest('.product-card');
         const productName = productCard.getAttribute("data-name");
         const product = stock.find(p => p.name === productName);
-        // const price = productCard.getAttribute("data-price");
         if (product) {
 
             try {
@@ -59,7 +53,7 @@ function createProductCard(productObj) {
                 <p>£${price}</p>
             </div>
             <div class="product-card-footer">
-                <button id="add-to-cart" >
+                <button data-action="add-to-cart" >
                 <i class="fas fa-plus-circle"></i> ADD TO CART
                 </button>
             </div>
@@ -70,44 +64,49 @@ function createProductCard(productObj) {
 function renderCartItems() {
     cartDropdown.innerHTML = "";
     const cartItems = cart.getCartItems();
+    let cartHtml = "";
+
     if (cartItems.length) {
-        const header = `
+        cartHtml += `
             <div class="cart-header">
                 <span>Name</span><span>Qty</span><span>Price</span>
             </div>
         `;
-        cartDropdown.insertAdjacentHTML("beforeend", header);
-    } 
-
-    cartItems.forEach(cartItem => {
-        const cartItemNode = `
-            <div class="cart-item">
-                <span>${cartItem.name}</span>
-                <span>${cartItem.qty}</span>
-                <span>£${(cartItem.price * cartItem.qty).toFixed(2)}</span>
+        
+        cartItems.forEach(cartItem => {
+            cartHtml += createCartItem(cartItem);
+        });
+        cartHtml += `
+            <div class="cart-footer">
+                ${createFooterRow("Net Total:", cart.getNetCartTotal())}
+                ${createFooterRow("Discount:", cart.getTotalDiscount())}
+                ${createFooterRow("Total:", cart.getCartTotal())}
             </div>
         `;
-        cartDropdown.insertAdjacentHTML("beforeend", cartItemNode);
-    });
+    } else {
+        cartHtml += "<p>Cart is empty</p>";
+    }
 
-    const cartFooter = `
-        <div class="cart-footer">
-            <div>
-                <span>Net Total:</span>
-                <span>£${cart.getNetCartTotal().toFixed(2)}</span>
-            </div>
-            <div>
-                <span>Discount:</span>
-                <span>£${cart.getTotalDiscount()}</span>
-            </div>
-            <div>
-                <span>Total:</span>
-                <span>£${cart.getCartTotal()}</span>
-            </div>
-        </div>
-    `;
-
-    cartDropdown.insertAdjacentHTML("beforeend", cartFooter);
+    cartDropdown.innerHTML = cartHtml;
 }
 
 
+function createFooterRow(label, amount) {
+    const roundedAmount = amount.toFixed(2);
+    return `
+        <div>
+            <span>${label}</span>
+            <span>£${roundedAmount}</span>
+        </div>
+    `;
+}
+
+function createCartItem(cartItem) {
+    return `
+        <div class="cart-item">
+            <span>${cartItem.name}</span>
+            <span>${cartItem.qty}</span>
+            <span>£${(cartItem.price * cartItem.qty).toFixed(2)}</span>
+        </div>
+    `;
+}
