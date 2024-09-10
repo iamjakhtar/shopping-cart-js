@@ -36,6 +36,12 @@ header > a, footer > p  {
     color: var(--color-primary);
 }
 
+header > a:first-child {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 footer {
     position: fixed;
     bottom: 0;
@@ -48,6 +54,23 @@ footer {
 
 button, a {
     cursor: pointer;
+}
+
+.cart-icon {
+    overflow: hidden;
+}
+
+.cart-icon > i {
+    font-size: 28px;
+}
+
+
+#badge {
+    color: #000;
+    margin-top: -34px;
+    margin-left: 14px;
+    font-size: 12px;
+    font-weight: 900;
 }
 
 #cart {
@@ -107,6 +130,10 @@ button, a {
     color: var(--color-primary);
     outline: none;
     border: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 12px;
 }
 
 .product-card-footer > button:active {

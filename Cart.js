@@ -41,9 +41,8 @@ class Cart {
         return this.getCartItems().find(item => item.name === productName);
     }
 
-    getProductCount(productName) {
-        const product = this.getProductByName(productName);
-        return product ? product.qty : 0;
+    getTotalCartItems() {
+        return this.cartItems.reduce((total, next) => total + next.qty, 0);
     }
 
     getProductTotal(productName) {

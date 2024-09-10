@@ -2,6 +2,7 @@
 const productsList = document.getElementById("product-list");
 const cartDropdown = document.getElementById("cart");
 const cartIcon = document.querySelector(".cart-icon");
+const badge = document.getElementById("badge");
 
 const discounts = [
     new Discount("A", 3, 1.30),
@@ -9,12 +10,24 @@ const discounts = [
 ];
 
 const cart  = new Cart(discounts);
+
 function toggleCartOpen() {
     cartDropdown.classList.toggle("hide-cart");
     if (!cart.getCartItems().length && !cartDropdown.classList.contains('hide-cart')) {
         cartDropdown.innerHTML = "<p>Cart is empty</p>";
     }
 }
+
+function closeCart() {
+    cartDropdown.classList.add("hide-cart");
+}
+
+function openCart() {
+    cartDropdown.classList.remove("hide-cart");
+    debouncedCartClose();
+}
+
+const debouncedCartClose = debounce(closeCart, 2000);
 
 cartIcon.addEventListener("click", toggleCartOpen);
 
@@ -35,6 +48,8 @@ productsList.addEventListener("click", (event) => {
             try {
                 cart.addToCart(new Product(product.name, product.price));
                 renderCartItems();
+                badge.textContent = cart.getTotalCartItems();
+                openCart();
             } catch (error) {
                 alert(error.message);
             }
@@ -109,4 +124,16 @@ function createCartItem(cartItem) {
             <span>£${(cartItem.price * cartItem.qty).toFixed(2)}</span>
         </div>
     `;
+}
+
+function debounce(callBackFunc, delay) {
+    let timerId;
+
+    return function(...args) {
+        if (timerId) {
+            clearTimeout(timerId);
+        }
+
+        timerId = setTimeout(() => callBackFunc(args), delay);
+    }
 }
